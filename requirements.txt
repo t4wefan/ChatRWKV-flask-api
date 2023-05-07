@@ -3,3 +3,4 @@ Flask
 torch
 transformers
 rwkvstic
+scipy
