@@ -1,4 +1,8 @@
+print("starting chatrwkv server")
+
 import os
+import time
+print("finding CUDA")
 import torch
 from torch.utils.cpp_extension import CUDA_HOME
 from flask import Flask, jsonify, request
@@ -63,17 +67,20 @@ def chat_with_rwkv():
     filename = f"{usrid}.txt"
     filepath = os.path.join(os.path.dirname(__file__), 'history', filename)
 
-    # 如果聊天历史记录文件不存在，则创建文件并写入标题行
+    # 如果聊天历史记录文件不存在，则创建文件
     if not os.path.exists(filepath):
-        with open(filepath, 'w', encoding='utf-8') as f:
-            f.write('timestamp,msg\n')
+        open(filepath, 'w').close()
 
-    # 将当前时间和消息内容写入聊天历史记录文件
+    # 将消息内容写入聊天历史记录文件
     with open(filepath, 'a', encoding='utf-8') as f:
-        f.write(f"{int(time.time())},{msg}\n")
+        f.write(f"{msg}\n")
 
     # 调用 RWKV 模型进行聊天
     res = model.predict(msg)
+
+    # 将聊天结果写入聊天历史记录文件
+    with open(filepath, 'a', encoding='utf-8') as f:
+        f.write(f"{res}\n")
 
     # 将聊天结果写入响应中并返回
     return jsonify({'status': 'ok', 'reply': res})
