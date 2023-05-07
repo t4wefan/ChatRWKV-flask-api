@@ -1,6 +1,6 @@
 import os
 import torch
-import torch.utils.cpp_extension
+from torch.utils.cpp_extension import CUDA_HOME
 from flask import Flask, jsonify, request
 from rwkvstic.load import RWKV
 
@@ -11,9 +11,12 @@ if torch.cuda.is_available():
     device_name = torch.cuda.get_device_name(0)
     print("CUDA device found:", device_name)
 
-    cuda_home = torch.utils.cpp_extension.CUDA_HOME
-    os.environ['CUDA_HOME'] = cuda_home
-    print("CUDA home:", cuda_home)
+    cuda_home = CUDA_HOME
+    if cuda_home is None or cuda_home.strip() == '':
+        print("CUDA_HOME is empty, please check your CUDA driver")
+    else:
+        os.environ['CUDA_HOME'] = cuda_home
+        print("CUDA home:", cuda_home)
 else:
     print("CUDA device not found")
 
