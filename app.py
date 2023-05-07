@@ -1,10 +1,12 @@
-from flask import Flask, jsonify, request
 import os
+import torch
+import torch.utils.cpp_extension
+from flask import Flask, jsonify, request
 from rwkvstic.load import RWKV
 
 # 加载 RWKV 模型
 model = RWKV(
-    "https://huggingface.co/BlinkDL/rwkv-4-raven/blob/main/RWKV-4-Raven-7B-v10-Eng49%25-Chn50%25-Other1%25-20230420-ctx4096.pth"
+    "https://huggingface.co/BlinkDL/rwkv-4-pile-3b/resolve/main/RWKV-4-Pile-3B-Instruct-test1-20230124.pth"
 )
 
 app = Flask(__name__)
@@ -84,5 +86,11 @@ def chat_with_rwkv():
     return jsonify(response), 200
 
 if __name__ == '__main__':
-    # 将 Flask 监听的端口设置为 7860，地址设置为 0.0.0.0
+    # 获取 CUDA 的安装路径
+    cuda_home = torch.utils.cpp_extension.CUDA_HOME
+
+    # 将 CUDA 的安装路径写入环境变量
+    os.environ['CUDA_HOME'] = cuda_home
+
+    # 启动 Flask 应用程序
     app.run(host='0.0.0.0', port=7860)
