@@ -10,11 +10,12 @@ app = Flask(__name__)
 if torch.cuda.is_available():
     device_name = torch.cuda.get_device_name(0)
     print("CUDA device found:", device_name)
+
+    cuda_home = torch.utils.cpp_extension.CUDA_HOME
+    os.environ['CUDA_HOME'] = cuda_home
+    print("CUDA home:", cuda_home)
 else:
     print("CUDA device not found")
-
-cuda_home = torch.utils.cpp_extension.CUDA_HOME
-print("CUDA home:", cuda_home)
 
 # 输出 "loading model"，加载模型并输出 "model loaded"
 print("loading model")
