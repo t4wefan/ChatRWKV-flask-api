@@ -1,6 +1,5 @@
 import os
 import torch
-import torch.utils.cpp_extension
 from flask import Flask, jsonify, request
 from rwkvstic.load import RWKV
 
@@ -11,9 +10,8 @@ if torch.cuda.is_available():
     device_name = torch.cuda.get_device_name(0)
     print("CUDA device found:", device_name)
 
-    cuda_home = torch.utils.cpp_extension.CUDA_HOME
-    os.environ['CUDA_HOME'] = cuda_home
-    print("CUDA home:", cuda_home)
+    os.environ['CUDA_HOME'] = '/usr/local/cuda'
+    print("CUDA home:", os.environ['CUDA_HOME'])
 else:
     print("CUDA device not found")
 
