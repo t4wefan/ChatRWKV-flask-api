@@ -22,6 +22,13 @@ if torch.cuda.is_available():
 else:
     print("CUDA device not found")
 
+# 输出 "loading model"，加载模型并输出 "model loaded"
+print("loading model")
+model = RWKV(
+    "https://huggingface.co/BlinkDL/rwkv-4-pile-3b/resolve/main/RWKV-4-Pile-3B-Instruct-test1-20230124.pth"
+)
+print("model loaded")
+
 # 修改 /chatrwkv 路由，同时支持 GET 和 POST 请求
 @app.route('/chatrwkv', methods=['GET', 'POST'])
 def chat_with_rwkv():
