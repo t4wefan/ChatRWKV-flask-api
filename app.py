@@ -4,7 +4,7 @@ from rwkvstic.load import RWKV
 
 # 加载 RWKV 模型
 model = RWKV(
-    "https://huggingface.co/BlinkDL/rwkv-4-pile-3b/resolve/main/RWKV-4-Pile-3B-Instruct-test1-20230124.pth"
+    "https://huggingface.co/BlinkDL/rwkv-4-raven/blob/main/RWKV-4-Raven-7B-v10-Eng49%25-Chn50%25-Other1%25-20230420-ctx4096.pth"
 )
 
 app = Flask(__name__)
