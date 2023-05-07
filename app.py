@@ -79,7 +79,7 @@ def chat_with_rwkv():
     model.loadContext(newctx=context)
 
     # 调用 RWKV 模型进行聊天
-    output = model.forward(number=100)["output"]
+    output = model.forward(number="100")["output"]
     res = output
 
     # 将聊天结果写入聊天历史记录文件
