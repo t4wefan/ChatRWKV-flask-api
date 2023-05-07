@@ -1,5 +1,3 @@
-print("starting chatrwkv server")
-
 import os
 import time
 print("finding CUDA")
@@ -23,13 +21,6 @@ if torch.cuda.is_available():
         print("CUDA home:", cuda_home)
 else:
     print("CUDA device not found")
-
-# 输出 "loading model"，加载模型并输出 "model loaded"
-print("loading model")
-model = RWKV(
-    "https://huggingface.co/BlinkDL/rwkv-4-pile-3b/resolve/main/RWKV-4-Pile-3B-Instruct-test1-20230124.pth"
-)
-print("model loaded")
 
 # 修改 /chatrwkv 路由，同时支持 GET 和 POST 请求
 @app.route('/chatrwkv', methods=['GET', 'POST'])
@@ -75,8 +66,14 @@ def chat_with_rwkv():
     with open(filepath, 'a', encoding='utf-8') as f:
         f.write(f"{msg}\n")
 
+    # 从聊天历史记录文件中读取上下文内容并加载上下文
+    with open(filepath, 'r', encoding='utf-8') as f:
+        context = f.read()
+    model.loadContext(newctx=context)
+
     # 调用 RWKV 模型进行聊天
-    res = model.predict(msg)
+    output = model.forward(newinput=msg, number=100)["output"]
+    res = output[0]["generated_text"]
 
     # 将聊天结果写入聊天历史记录文件
     with open(filepath, 'a', encoding='utf-8') as f:
