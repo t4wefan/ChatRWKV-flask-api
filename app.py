@@ -4,12 +4,24 @@ import torch.utils.cpp_extension
 from flask import Flask, jsonify, request
 from rwkvstic.load import RWKV
 
-# 加载 RWKV 模型
+app = Flask(__name__)
+
+# 检测 CUDA 是否可用并输出 CUDA 设备名称和 CUDA 安装路径
+if torch.cuda.is_available():
+    device_name = torch.cuda.get_device_name(0)
+    print("CUDA device found:", device_name)
+else:
+    print("CUDA device not found")
+
+cuda_home = torch.utils.cpp_extension.CUDA_HOME
+print("CUDA home:", cuda_home)
+
+# 输出 "loading model"，加载模型并输出 "model loaded"
+print("loading model")
 model = RWKV(
     "https://huggingface.co/BlinkDL/rwkv-4-pile-3b/resolve/main/RWKV-4-Pile-3B-Instruct-test1-20230124.pth"
 )
-
-app = Flask(__name__)
+print("model loaded")
 
 # 修改 /chatrwkv 路由，同时支持 GET 和 POST 请求
 @app.route('/chatrwkv', methods=['GET', 'POST'])
@@ -45,52 +57,22 @@ def chat_with_rwkv():
 
     # 构建聊天历史记录文件名和路径
     filename = f"{usrid}.txt"
-    filepath = os.path.join(os.getcwd(), 'history', filename)
+    filepath = os.path.join(os.path.dirname(__file__), 'rwkvstic', 'history', source, filename)
 
-    # 如果聊天历史记录文件不存在，则创建一个空文件
+    # 如果聊天历史记录文件不存在，则创建文件并写入标题行
     if not os.path.exists(filepath):
-        with open(filepath, 'w') as f:
-            f.write('')
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write('timestamp,msg\n')
 
-    # 将 msg 写入聊天历史记录文件
-    with open(filepath, 'a') as f:
-        f.write(f"Ask: {msg}\n")
+    # 将当前时间和消息内容写入聊天历史记录文件
+    with open(filepath, 'a', encoding='utf-8') as f:
+        f.write(f"{int(time.time())},{msg}\n")
 
-    # 获取聊天历史记录文件中对应 usrid 的全部内容
-    with open(filepath, 'r') as f:
-        lines = f.readlines()
-        for i in range(len(lines)):
-            if lines[i].startswith(f"{usrid}:"):
-                context = "".join(lines[i:]).strip()
-                break
+    # 调用 RWKV 模型进行聊天
+    res = model.predict(msg)
 
-    # 设置模型上下文
-    model.loadContext(newctx=context)
+    # 将聊天结果写入响应中并返回
+    return jsonify({'status': 'ok', 'reply': res})
 
-    # 生成回答
-    output = model.forward(number=1)["output"][0]
-
-    # 从回答中提取最后一行 reply，并去掉开头的 "Reply: " 字符串
-    reply = output.split("Reply:")[-1].strip().replace("Reply:", "").strip()
-
-    # 将 reply 写入聊天历史记录文件
-    with open(filepath, 'a') as f:
-        f.write(f"Reply: {reply}\n\n")
-
-    # 返回响应
-    response = {
-        'status': 'ok',
-        'usrid': usrid,
-        'reply': reply
-    }
-    return jsonify(response), 200
-
-if __name__ == '__main__':
-    # 获取 CUDA 的安装路径
-    cuda_home = torch.utils.cpp_extension.CUDA_HOME
-
-    # 将 CUDA 的安装路径写入环境变量
-    os.environ['CUDA_HOME'] = cuda_home
-
-    # 启动 Flask 应用程序
-    app.run(host='0.0.0.0', port=7860)
+# 启动 Flask 应用程序
+app.run(host='0.0.0.0', port=7860)
