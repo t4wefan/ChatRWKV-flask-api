@@ -80,7 +80,7 @@ def chat_with_rwkv():
 
     # 调用 RWKV 模型进行聊天
     output = model.forward(number=100)["output"]
-    res = output[0]["generated_text"]
+    res = output
 
     # 将聊天结果写入聊天历史记录文件
     with open(filepath, 'a', encoding='utf-8') as f:
