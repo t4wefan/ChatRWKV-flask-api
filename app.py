@@ -79,4 +79,4 @@ def chat_with_rwkv():
     return jsonify({'status': 'ok', 'reply': res})
 
 # 启动 Flask 应用程序
-app.run(host='0.0.0.0', port=7860)
+app.run(host='0.0.0.0', port=7860) 
