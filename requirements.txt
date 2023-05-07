@@ -1,0 +1,7 @@
+Flask
+
+torch 
+
+transformers
+
+rwkvstic
