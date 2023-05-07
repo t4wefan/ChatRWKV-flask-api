@@ -61,7 +61,7 @@ def chat_with_rwkv():
 
     # 构建聊天历史记录文件名和路径
     filename = f"{usrid}.txt"
-    filepath = os.path.join(os.path.dirname(__file__), 'rwkvstic', 'history', source, filename)
+    filepath = os.path.join(os.path.dirname(__file__), 'history', filename)
 
     # 如果聊天历史记录文件不存在，则创建文件并写入标题行
     if not os.path.exists(filepath):
@@ -79,4 +79,4 @@ def chat_with_rwkv():
     return jsonify({'status': 'ok', 'reply': res})
 
 # 启动 Flask 应用程序
-app.run(host='0.0.0.0', port=7860) 
+app.run(host='0.0.0.0', port=7860)
