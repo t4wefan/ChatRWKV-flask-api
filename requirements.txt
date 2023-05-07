@@ -1,7 +1,4 @@
 Flask
-
-torch 
-
+torch
 transformers
-
 rwkvstic
