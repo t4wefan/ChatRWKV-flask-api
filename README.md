@@ -1,5 +1,5 @@
 # ChatRWKV-flask-api
-一个由 ChatGPT 完成的 ChatRWKV 服务端（包括这个readme）
+一个由 ChatGPT 完成的 ChatRWKV 服务端，包括这个   readme（的以下部分
 
 # 程序功能
 本程序是一个简单的基于 Flask 框架的聊天机器人服务端，使用 RWKV 模型进行聊天，支持 GET 和 POST 请求，用于与客户端交互并记录聊天记录。
