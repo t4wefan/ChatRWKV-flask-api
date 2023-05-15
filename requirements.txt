@@ -6,3 +6,4 @@ rwkvstic
 scipy
 tokenizers>=0.13.2 
 prompt_toolkit
+rwkv
