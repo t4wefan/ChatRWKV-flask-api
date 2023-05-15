@@ -1,21 +1,23 @@
 from flask import Flask, request, jsonify
-import json
 from rwkv.model import RWKV
 from rwkv.utils import PIPELINE, PIPELINE_ARGS
 
 # 加载模型
 print("正在加载模型，请稍等...")
 model = RWKV(model='RWKV-4-Pile-169M-20220807-8023', strategy='cuda fp16')
+pipeline_args = PIPELINE_ARGS(
+    temperature=1.0,
+    top_p=0.7,
+    top_k=0,  # top_k = 0 则忽略该参数
+    alpha_frequency=0.25,
+    alpha_presence=0.25,
+    token_ban=[0],  # 禁止生成某些 token
+    token_stop=[],  # 遇到指定的 token 就停止生成
+    chunk_len=256  # 将输入分成多个块以节省 VRAM（块越短，速度越慢）
+)
 pipeline = PIPELINE(model, "20B_tokenizer.json")
+args = dict(pipeline_args)
 print("模型加载完成！")
-
-# 设置参数
-args = PIPELINE_ARGS(temperature = 1.0, top_p = 0.7, top_k=0, # top_k = 0 then ignore
-                     alpha_frequency = 0.25,
-                     alpha_presence = 0.25,
-                     token_ban = [0], # ban the generation of some tokens
-                     token_stop = [], # stop generation whenever you see any token here
-                     chunk_len = 256) # split input into chunks to save VRAM (shorter -> slower)
 
 # 创建Flask应用
 app = Flask(__name__)
