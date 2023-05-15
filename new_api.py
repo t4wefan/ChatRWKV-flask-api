@@ -1,12 +1,13 @@
-
 from flask import Flask, request, jsonify
 import json
 from rwkv.model import RWKV
 from rwkv.utils import PIPELINE, PIPELINE_ARGS
 
 # 加载模型
+print("正在加载模型，请稍等...")
 model = RWKV(model='/fsx/BlinkDL/HF-MODEL/rwkv-4-pile-169m/RWKV-4-Pile-169M-20220807-8023', strategy='cuda fp16')
 pipeline = PIPELINE(model, "20B_tokenizer.json")
+print("模型加载完成！")
 
 # 设置参数
 args = PIPELINE_ARGS(temperature = 1.0, max_tokens = 50, top_p = 0.95, frequency_penalty = 0.0, presence_penalty = 0.0, stop=["\n"])
@@ -27,6 +28,8 @@ def chat_rwkv():
     # 检查参数是否齐全
     if not all([source, msg, usrid]):
         return jsonify({'code': 400, 'msg': '参数缺失'})
+    # 输出请求参数
+    print(f"请求参数：source={source}, msg={msg}, usrid={usrid}")
     # 如果该usrid还没有对话记录，就创建一个空列表，并将其作为chat_dict的一个键值对，键为usrid，值为该列表
     if usrid not in chat_dict:
         chat_dict[usrid] = []
@@ -39,6 +42,8 @@ def chat_rwkv():
     chat_dict[usrid].append(out + "\n")
     # 将该usrid下的所有记录拼接起来，作为响应返回
     response = ''.join(chat_dict[usrid])
+    # 输出响应内容
+    print(f"响应内容：{response}")
     return response
 
 if __name__ == '__main__':
