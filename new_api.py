@@ -5,12 +5,17 @@ from rwkv.utils import PIPELINE, PIPELINE_ARGS
 
 # 加载模型
 print("正在加载模型，请稍等...")
-model = RWKV(model='/rwkv-4-pile-169m/RWKV-4-Pile-169M-20220807-8023', strategy='cuda fp16')
+model = RWKV(model='RWKV-4-Pile-169M-20220807-8023', strategy='cuda fp16')
 pipeline = PIPELINE(model, "20B_tokenizer.json")
 print("模型加载完成！")
 
 # 设置参数
-args = PIPELINE_ARGS(temperature = 1.0, max_tokens = 50, top_p = 0.95, frequency_penalty = 0.0, presence_penalty = 0.0, stop=["\n"])
+args = PIPELINE_ARGS(temperature = 1.0, top_p = 0.7, top_k=0, # top_k = 0 then ignore
+                     alpha_frequency = 0.25,
+                     alpha_presence = 0.25,
+                     token_ban = [0], # ban the generation of some tokens
+                     token_stop = [], # stop generation whenever you see any token here
+                     chunk_len = 256) # split input into chunks to save VRAM (shorter -> slower)
 
 # 创建Flask应用
 app = Flask(__name__)
