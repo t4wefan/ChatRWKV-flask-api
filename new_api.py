@@ -5,7 +5,7 @@ from rwkv.utils import PIPELINE, PIPELINE_ARGS
 
 # 加载模型
 print("正在加载模型，请稍等...")
-model = RWKV(model='/fsx/BlinkDL/HF-MODEL/rwkv-4-pile-169m/RWKV-4-Pile-169M-20220807-8023', strategy='cuda fp16')
+model = RWKV(model='/rwkv-4-pile-169m/RWKV-4-Pile-169M-20220807-8023', strategy='cuda fp16')
 pipeline = PIPELINE(model, "20B_tokenizer.json")
 print("模型加载完成！")
 
