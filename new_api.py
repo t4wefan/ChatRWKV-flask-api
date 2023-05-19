@@ -59,7 +59,7 @@ def chat_rwkv():
     # 将模型的输出写入该usrid下的记录列表，并在末尾添加一个换行符
     chat_dict[usrid].append(out + "\n")
     # 将该usrid下的所有记录拼接起来，作为响应返回
-    response = ''.join(chat_dict[usrid])
+    response = out
     # 输出响应内容
     print(f"响应内容：{response}")
     return response
