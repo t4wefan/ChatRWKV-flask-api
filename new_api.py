@@ -8,6 +8,17 @@ np.set_printoptions(precision=4, suppress=True, linewidth=200)
 
 # 加载模型
 print("正在加载模型，请稍等...")
+filename = 'RWKV-4-Raven-3B-v10-Eng49%-Chn50%-Other1%-20230419-ctx4096.pth'
+def checkmodel(filename)
+    if os.path.isfile(filename):
+        print('模型以存在，开始加载')
+    else:
+        print('模型不存在，开始下载')
+        os.system('wget https://huggingface.co/BlinkDL/rwkv-4-raven/resolve/main/RWKV-4-Raven-3B-v10-Eng49%25-Chn50%25-Other1%25-20230419-ctx4096.pth')
+        return 'done'
+
+checkmodel(filename)
+
 os.environ['RWKV_JIT_ON'] = '1'
 os.environ["RWKV_CUDA_ON"] = '0' # '1' to compile CUDA kernel (10x faster), requires c++ compiler & cuda libraries
 model = RWKV(model='raven.bin', strategy='cuda fp16')
