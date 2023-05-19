@@ -9,7 +9,7 @@ np.set_printoptions(precision=4, suppress=True, linewidth=200)
 # 加载模型
 print("正在加载模型，请稍等...")
 filename = 'RWKV-4-Raven-3B-v10-Eng49%-Chn50%-Other1%-20230419-ctx4096.pth'
-def checkmodel(filename)
+def checkmodel(filename):
     if os.path.isfile(filename):
         print('模型以存在，开始加载')
     else:
