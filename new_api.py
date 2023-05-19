@@ -10,7 +10,7 @@ np.set_printoptions(precision=4, suppress=True, linewidth=200)
 print("正在加载模型，请稍等...")
 os.environ['RWKV_JIT_ON'] = '1'
 os.environ["RWKV_CUDA_ON"] = '0' # '1' to compile CUDA kernel (10x faster), requires c++ compiler & cuda libraries
-model = RWKV(model='RWKV-4-Pile-169M-20220807-8023', strategy='cuda fp16')
+model = RWKV(model='raven.bin', strategy='cuda fp16')
 pipeline = PIPELINE(model, "20B_tokenizer.json")
 
 out, state = model.forward([187, 510, 1563, 310, 247], None)
