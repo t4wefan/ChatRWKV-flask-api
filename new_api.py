@@ -21,7 +21,7 @@ checkmodel(filename)
 
 os.environ['RWKV_JIT_ON'] = '1'
 os.environ["RWKV_CUDA_ON"] = '0' # '1' to compile CUDA kernel (10x faster), requires c++ compiler & cuda libraries
-model = RWKV(model='raven.bin', strategy='cuda fp16')
+model = RWKV(model='RWKV-4-Raven-3B-v10-Eng49%-Chn50%-Other1%-20230419-ctx4096', strategy='cuda fp16')
 pipeline = PIPELINE(model, "20B_tokenizer.json")
 
 out, state = model.forward([187, 510, 1563, 310, 247], None)
