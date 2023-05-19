@@ -48,6 +48,7 @@ def chat_rwkv():
     # 将该usrid下的所有记录拼接起来，作为输入给模型，并调用rwkv模型生成回答
     prompt = ''.join(chat_dict[usrid])
     ctx = prompt
+    out = "out"
     args = PIPELINE_ARGS(temperature=1.0, top_p=0.7, top_k=0,  # top_k = 0 then ignore
                          alpha_frequency=0.25,
                          alpha_presence=0.25,
