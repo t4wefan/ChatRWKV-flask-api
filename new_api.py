@@ -16,7 +16,7 @@ pipeline_args = PIPELINE_ARGS(
     chunk_len=256  # 将输入分成多个块以节省 VRAM（块越短，速度越慢）
 )
 pipeline = PIPELINE(model, "20B_tokenizer.json")
-args = dict(pipeline_args)
+args = pipeline_args
 print("模型加载完成！")
 
 # 创建Flask应用
@@ -44,7 +44,7 @@ def chat_rwkv():
     chat_dict[usrid].append(msg + "\n")
     # 将该usrid下的所有记录拼接起来，作为输入给模型，并调用rwkv模型生成回答
     prompt = ''.join(chat_dict[usrid])
-    out = pipeline(prompt, **args)
+    out = pipeline(prompt, args)
     # 将模型的输出写入该usrid下的记录列表，并在末尾添加一个换行符
     chat_dict[usrid].append(out + "\n")
     # 将该usrid下的所有记录拼接起来，作为响应返回
