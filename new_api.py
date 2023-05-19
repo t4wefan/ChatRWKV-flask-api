@@ -63,7 +63,7 @@ def chat_rwkv():
     args = PIPELINE_ARGS(temperature=max(0.2, float(0.99)), top_p=float(0.99),
                          token_ban=[],  # ban the generation of some tokens
                          token_stop=[0])  # stop generation whenever you see any token here
-    out = pipeline.generate(ctx, args, )
+    out = pipeline.generate(ctx,  )
     # 将模型的输出写入该usrid下的记录列表，并在末尾添加一个换行符
     chat_dict[usrid].append(out + "\n")
     # 将该usrid下的所有记录拼接起来，作为响应返回
