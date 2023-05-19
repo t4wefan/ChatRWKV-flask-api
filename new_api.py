@@ -60,7 +60,7 @@ def chat_rwkv():
     prompt = ''.join(chat_dict[usrid])
     ctx = prompt
     out = "out"
-    args = PIPELINE_ARGS(temperature=max(0.2, float(0.99)), top_p=float(top_p),
+    args = PIPELINE_ARGS(temperature=max(0.2, float(0.99)), top_p=float(0.99),
                          token_ban=[],  # ban the generation of some tokens
                          token_stop=[0])  # stop generation whenever you see any token here
     out = pipeline.generate(ctx, args, )
