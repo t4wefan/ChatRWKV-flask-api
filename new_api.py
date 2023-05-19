@@ -55,7 +55,12 @@ def chat_rwkv():
                          token_ban=[0],  # ban the generation of some tokens
                          token_stop=[],  # stop generation whenever you see any token here
                          chunk_len=256)  # split input into chunks to save VRAM (shorter -> slower)
-    pipeline.generate(ctx, args,)
+    pipeline.generate(ctx, temperature=1.0, top_p=0.7, top_k=0,  # top_k = 0 then ignore
+                         alpha_frequency=0.25,
+                         alpha_presence=0.25,
+                         token_ban=[0],  # ban the generation of some tokens
+                         token_stop=[],  # stop generation whenever you see any token here
+                         chunk_len=256)
     # 将模型的输出写入该usrid下的记录列表，并在末尾添加一个换行符
     chat_dict[usrid].append(out + "\n")
     # 将该usrid下的所有记录拼接起来，作为响应返回
