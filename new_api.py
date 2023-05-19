@@ -44,7 +44,7 @@ def chat_rwkv():
     chat_dict[usrid].append(msg + "\n")
     # 将该usrid下的所有记录拼接起来，作为输入给模型，并调用rwkv模型生成回答
     prompt = ''.join(chat_dict[usrid])
-    out = pipeline(prompt, args)
+    out = pipeline.generate(prompt, args)
     # 将模型的输出写入该usrid下的记录列表，并在末尾添加一个换行符
     chat_dict[usrid].append(out + "\n")
     # 将该usrid下的所有记录拼接起来，作为响应返回
