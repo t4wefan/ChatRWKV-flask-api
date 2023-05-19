@@ -24,12 +24,12 @@ os.environ["RWKV_CUDA_ON"] = '0' # '1' to compile CUDA kernel (10x faster), requ
 model = RWKV(model='RWKV-4-Raven-3B-v10-Eng49%-Chn50%-Other1%-20230419-ctx4096', strategy='cuda fp16')
 pipeline = PIPELINE(model, "20B_tokenizer.json")
 
-out, state = model.forward([187, 510, 1563, 310, 247], None)
-print(out.detach().cpu().numpy())                   # get logits
-out, state = model.forward([187, 510], None)
-out, state = model.forward([1563], state)           # RNN has state (use deepcopy to clone states)
-out, state = model.forward([310, 247], state)
-print(out.detach().cpu().numpy())
+#out, state = model.forward([187, 510, 1563, 310, 247], None)
+#print(out.detach().cpu().numpy())                   # get logits
+#out, state = model.forward([187, 510], None)
+#out, state = model.forward([1563], state)           # RNN has state (use deepcopy to clone states)
+#out, state = model.forward([310, 247], state)
+#print(out.detach().cpu().numpy())
 
 print("模型加载完成！")
 
