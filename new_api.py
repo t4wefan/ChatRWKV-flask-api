@@ -1,11 +1,14 @@
+print('初始化中')
 from flask import Flask, request, jsonify
 from rwkv.model import RWKV
 from rwkv.utils import PIPELINE, PIPELINE_ARGS
+import os, sys, torch
+import numpy as np
 
 # 加载模型
 print("正在加载模型，请稍等...")
 model = RWKV(model='RWKV-4-Pile-169M-20220807-8023', strategy='cuda fp16')
-pipeline_args = PIPELINE_ARGS(
+args = PIPELINE_ARGS(
     temperature=1.0,
     top_p=0.7,
     top_k=0,  # top_k = 0 则忽略该参数
@@ -16,7 +19,7 @@ pipeline_args = PIPELINE_ARGS(
     chunk_len=256  # 将输入分成多个块以节省 VRAM（块越短，速度越慢）
 )
 pipeline = PIPELINE(model, "20B_tokenizer.json")
-args = pipeline_args
+
 print("模型加载完成！")
 
 # 创建Flask应用
@@ -44,7 +47,8 @@ def chat_rwkv():
     chat_dict[usrid].append(msg + "\n")
     # 将该usrid下的所有记录拼接起来，作为输入给模型，并调用rwkv模型生成回答
     prompt = ''.join(chat_dict[usrid])
-    out = pipeline.generate(prompt, args)
+    ctx = prompt
+    out = pipeline.generate(ctx, args, callback=my_print)
     # 将模型的输出写入该usrid下的记录列表，并在末尾添加一个换行符
     chat_dict[usrid].append(out + "\n")
     # 将该usrid下的所有记录拼接起来，作为响应返回
